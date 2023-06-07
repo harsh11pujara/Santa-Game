@@ -6,7 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:santa_game/Components/santa_component.dart';
 import 'package:santa_game/Constants/globals.dart';
-import 'package:santa_game/main.dart';
+import 'package:santa_game/Game/santa_game.dart';
 
 class GiftComponent extends SpriteComponent with CollisionCallbacks, HasGameRef<SantaGame>{
   double giftSize = 200;
@@ -46,8 +46,10 @@ class GiftComponent extends SpriteComponent with CollisionCallbacks, HasGameRef<
   }
 
   performOnCollision() async{
-    print("boom");
+    // print("boom");
     removeFromParent();
+    gameRef.score = gameRef.score + 1;
+    // gameRef.update(dt)
     if (!gameRef.contains(GiftComponent())) {
       await FlameAudio.play(Globals.giftGrabSound);
       await gameRef.add(GiftComponent());

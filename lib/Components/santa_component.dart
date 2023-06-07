@@ -1,9 +1,10 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:santa_game/Components/gift_componennt.dart';
 import 'package:santa_game/Components/ice_component.dart';
 import 'package:santa_game/Constants/globals.dart';
-import 'package:santa_game/main.dart';
+import 'package:santa_game/Game/santa_game.dart';
 
 enum MovementState{
   idle,
@@ -16,6 +17,8 @@ class SantaComponent extends SpriteGroupComponent<MovementState> with HasGameRef
   double santaHeight = 150;
   double speed = 500;
   late Vector2 boxPosition;
+  bool isFreeze = false;
+  Timer timer = Timer(3);
 
   late double leftBound;
   late double rightBound;
@@ -69,48 +72,59 @@ class SantaComponent extends SpriteGroupComponent<MovementState> with HasGameRef
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     // TODO: implement onCollision
     super.onCollision(intersectionPoints, other);
-    print("santa aaa");
+    // print("santa aaa");
     if(other is GiftComponent){
-      print("got gift");
+      // print("got gift");
     }
     else if (other is IceComponent){
-      current = MovementState.santaFrozen;
+      if(isFreeze == false) {
+        isFreeze = true;
+        current = MovementState.santaFrozen;
+        FlameAudio.play(Globals.freezeSound);
+      }
     }
     else{
-      print("no gift");
+      // print("no gift");
     }
   }
 
   @override
   void update(double dt) {
-    // print(boxPosition);
     super.update(dt);
 
-    if(x > rightBound){
-      x  = rightBound - 1;
-    }
-    if(x<leftBound){
-      x = leftBound + 1;
-    }
-    if( y > lowerBound){
-      y = lowerBound -1;
-    }
-    if(y < upperBound){
-      y = upperBound + 1;
-    }
+    if (isFreeze == false) {
+      if(x > rightBound){
+        x  = rightBound - 1;
+      }
+      if(x<leftBound){
+        x = leftBound + 1;
+      }
+      if( y > lowerBound){
+        y = lowerBound -1;
+      }
+      if(y < upperBound){
+        y = upperBound + 1;
+      }
 
-    if(joystick.direction == JoystickDirection.idle){
-      current = MovementState.idle;
-    }
-    else if (joystick.relativeDelta[0] < 0){
-      current = MovementState.slideLeft;
+      if(joystick.direction == JoystickDirection.idle){
+        current = MovementState.idle;
+      }
+      else if (joystick.relativeDelta[0] < 0){
+        current = MovementState.slideLeft;
+      }else{
+        current = MovementState.slideRight;
+      }
+
+      position.add(joystick.relativeDelta * speed * dt);
+      // boxPosition = joystick.relativeDelta * speed * dt;
+      boxPosition.add(joystick.relativeDelta * speed * dt);
     }else{
-      current = MovementState.slideRight;
+      timer.update(dt);
+      if(timer.finished){
+        isFreeze = false;
+        timer = Timer(3);
+      }
     }
-
-    position.add(joystick.relativeDelta * speed * dt);
-    // boxPosition = joystick.relativeDelta * speed * dt;
-    boxPosition.add(joystick.relativeDelta * speed * dt);
 
   }
 }
