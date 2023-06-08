@@ -1,9 +1,9 @@
+import 'package:flame/palette.dart';
 import 'package:santa_game/Components/background_component.dart';
 import 'package:santa_game/Components/gift_componennt.dart';
 import 'package:santa_game/Components/ice_component.dart';
 import 'package:santa_game/Components/santa_component.dart';
 import 'package:santa_game/Constants/globals.dart';
-import 'package:santa_game/Input/joystick_component.dart';
 import 'dart:async';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +22,21 @@ class SantaGame extends FlameGame with HasCollisionDetection {
   @override
   Future<void> onLoad() async{
     await super.onLoad();
-    // collisionDetection = CollisionDetection();
+
+    JoystickComponent joystick = JoystickComponent(
+        knob: CircleComponent(radius: 30,paint: BasicPalette.red.withAlpha(200).paint()),
+        background: CircleComponent(radius: 70,paint: BasicPalette.red.withAlpha(100).paint()),
+        margin: const EdgeInsets.only(left: 20,bottom: 20)
+    );
+
     add(BackgroundComponent());
     add(SantaComponent(joystick: joystick));
     add(GiftComponent());
     add(IceComponent());
     add(IceComponent());
     add(ScreenHitbox());
+
+
     add(joystick);
 
     scoreComponent = TextComponent(
@@ -84,5 +92,7 @@ class SantaGame extends FlameGame with HasCollisionDetection {
     // TODO: implement resumeEngine
     super.resumeEngine();
   }
+
+
 
 }
