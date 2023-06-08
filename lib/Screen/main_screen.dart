@@ -14,7 +14,8 @@ class MainScreen extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               child: Image.asset(
                 "assets/images/background-sprite.jpg",
-                fit: BoxFit.fill,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.cover,
               )),
           Container(
             width: MediaQuery.of(context).size.width,

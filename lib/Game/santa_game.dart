@@ -33,7 +33,7 @@ class SantaGame extends FlameGame with HasCollisionDetection {
 
     scoreComponent = TextComponent(
       text: "Score: $score",
-      position: Vector2(size.x/2 - 130,40),
+      position: Vector2(size.x/2 - size.x/3.5,40),
       anchor: Anchor.topCenter,
       textRenderer: TextPaint(style: const TextStyle(fontSize: 35, color: Colors.white,fontStyle: FontStyle.italic)),
     );
@@ -41,7 +41,7 @@ class SantaGame extends FlameGame with HasCollisionDetection {
 
     time = TextComponent(
       text: "Time: $remainingTime",
-      position: Vector2(size.x/2 + 130,40),
+      position: Vector2(size.x/2 + size.x/3.5,40),
       anchor: Anchor.topCenter,
       textRenderer: TextPaint(style: const TextStyle(fontSize: 35, color: Colors.white,fontStyle: FontStyle.italic)),
     );
@@ -84,4 +84,5 @@ class SantaGame extends FlameGame with HasCollisionDetection {
     // TODO: implement resumeEngine
     super.resumeEngine();
   }
+
 }
